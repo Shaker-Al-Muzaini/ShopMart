@@ -13,8 +13,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 //shaker
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
+Route::middleware (['auth', 'd'])->group(function () {
+    Route::get('sd', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
