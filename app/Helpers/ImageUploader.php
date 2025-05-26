@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use Illuminate\Http\UploadedFile;
@@ -27,7 +28,6 @@ class ImageUploader
 
             Storage::disk('public')->put($storagePath, $encodedImage->toString());
             $publicPath = str_replace('public/', '/storage/', $storagePath);
-
             return $publicPath;
         } catch (\Exception $e) {
             report($e);

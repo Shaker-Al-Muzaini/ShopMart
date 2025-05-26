@@ -2,20 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\ImageUploader;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminStoreRequest;
 use App\Http\Requests\AdminUpdateRequest;
+use App\Http\Resources\AdminResource;
 use App\Models\User;
-use http\Client\Response;
-use Illuminate\Http\RedirectResponse;
+use App\Repositories\AdminRepository;
+use App\Services\AdminService;
+use App\Strategies\RoleBasedAdminVerification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class AdminControler extends Controller
 {
+    protected $service;
+
+    public function __construct()
+    {
+        $repo = new AdminRepository();
+        $verifier = new RoleBasedAdminVerification();
+        $this->service = new AdminService($repo, $verifier);
+    }
 
     public function index(Request $request): \Inertia\Response
     {
@@ -50,49 +59,75 @@ class AdminControler extends Controller
         ]);
     }
 
-    public function create(Request $request): \Inertia\Response
+    public function create()
     {
         return Inertia::render('Admin/Admins/Create');
     }
-    public function store(AdminStoreRequest $request):RedirectResponse
+
+    public function store(AdminStoreRequest $request)
     {
-        $data = $request->only('name', 'email', 'phone', 'password');
-        if($request->hasFile('avatar')){
-            $data['avatar'] =ImageUploader::uploadImage($request->file('avatar'), 'admins');
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
+
+            if ($request->hasFile('avatar')) {
+                $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            }
+
+            $this->service->createAdmin($data);
+            DB::commit();
+            return redirect()->route('admin.admins.index')->with('success', 'Admin created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'Something went wrong: ' . $e->getMessage()]);
         }
-        $data['password'] = bcrypt($data['password']);
-        $data['role'] = 'admin';
-
-        User::create($data);
-        return redirect()->route('admin.admins.index')->with('success', 'Admins created successfully.');
-
     }
-    public function edit($id)
+
+    public function edit($id): \Inertia\Response
     {
-        $admin=User::findOrFail($id);
+        $admin = User::findOrFail($id);
+        $admin->avatar = asset('storage/' . $admin->avatar);
         return Inertia::render('Admin/Admins/Edit', [
             'admin' => $admin
         ]);
-
     }
-    public function update(AdminUpdateRequest $request ,User $admin):RedirectResponse
-    {
-        $data = $request->only('name', 'email', 'phone');
 
-        if ($request->hasFile('avatar')) {
-            ImageUploader::deleteImage($admin->avatar);
-            $data['avatar'] = ImageUploader::uploadImage($request->file('avatar'), 'admins');
+    public function update(AdminUpdateRequest $request, User $admin)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
+
+            if ($request->hasFile('avatar')) {
+                if ($admin->avatar) {
+                    Storage::disk('public')->delete($admin->avatar);
+                }
+                $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            }
+
+            $this->service->updateAdmin($admin, $data);
+            DB::commit();
+            return redirect()->route('admin.admins.index')->with('success', 'Admin updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'Something went wrong: ' . $e->getMessage()]);
         }
-
-        $admin->update($data);
-        return redirect()->route('admin.admins.index')->with('success', 'Admins updated successfully.');
-
     }
-    public function destroy($id): RedirectResponse
+
+    public function destroy(User $admin)
     {
-        $admin = User::findOrFail($id);
-        ImageUploader::deleteImage($admin->avatar);
-        $admin->delete();
-        return redirect()->route('admin.admins.index')->with('success', 'Admins deleted successfully.');
+        DB::beginTransaction();
+        try {
+            if ($admin->avatar) {
+                Storage::disk('public')->delete($admin->avatar);
+            }
+
+            $this->service->deleteAdmin($admin);
+            DB::commit();
+            return redirect()->route('admin.admins.index')->with('success', 'Admin deleted successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'Something went wrong: ' . $e->getMessage()]);
+        }
     }
 }

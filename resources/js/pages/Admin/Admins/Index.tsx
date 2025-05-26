@@ -1,8 +1,8 @@
-
 import DataTable from '@/components/DataTables/DataTable';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
-import { Users } from 'lucide-react';
+import { Briefcase } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function AdminIndex() {
     const { admins, filters, can } = usePage().props;
@@ -28,10 +28,10 @@ export default function AdminIndex() {
         router.delete(route('admin.admins.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
-                // toast.success('User deleted successfully');
+                toast.success('Admin deleted successfully');
             },
             onError: () => {
-                // toast.error('User deletion failed');
+                toast.error('Admin deletion failed');
             },
         });
     };
@@ -56,7 +56,7 @@ export default function AdminIndex() {
                         viewRoute="admin.admins.show"
                         editRoute="admin.admins.edit"
                         onDelete={handleDelete}
-                        icon={Users}
+                        icon={Briefcase}
                     />
                 </div>
             </div>

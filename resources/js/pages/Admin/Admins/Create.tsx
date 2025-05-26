@@ -8,6 +8,8 @@ import { BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { AlertCircle, ArrowLeft, ImageIcon, Lock, Mail, Phone, Save, Trash2, Upload, User } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { toast } from 'react-toastify';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
@@ -47,10 +49,12 @@ export default function Create() {
             onSuccess: () => {
                 setIsUploading(false);
                 setUploadProgress(0);
+                toast.success('The Admin was created successfully.');
             },
             onError: () => {
                 setIsUploading(false);
                 setUploadProgress(0);
+                toast.error('An error occurred during creation...');
             },
         });
     };

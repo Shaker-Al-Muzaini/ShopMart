@@ -1,7 +1,8 @@
 import { router, usePage } from '@inertiajs/react';
 import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, Search } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import DeleteDialog from '../DeleteDialog';
+import { useEffect } from 'react';
 
 interface TableColumn {
     key: string;
@@ -27,8 +28,7 @@ export default function DataTable({
                                       createRoute = '',
                                       editRoute = '',
                                       onDelete,
-                                  }:
- {
+                                  }: {
     data: any;
     columns: any;
     resourceName: string;
@@ -40,16 +40,25 @@ export default function DataTable({
     canCreateResource: boolean;
     canEditResource: boolean;
     canDeleteResource: boolean;
-    icon:React.ElementType;
+    icon: React.ElementType;
     createRoute: string;
     editRoute: string;
     onDelete: (id: string) => void;
 }) {
-    const {errors} = usePage().props;
+    const { errors } = usePage().props;
+
     const [search, setSearch] = useState(filters?.search || '');
     const [perPage, setPerPage] = useState(filters?.perPage || 10);
     const [sort, setSort] = useState(filters?.sort || 'id');
     const [direction, setDirection] = useState(filters?.direction || 'desc');
+    // Live Search
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            updateRoute();
+        }, 200);
+
+        return () => clearTimeout(delayDebounce);
+    }, [search]);
 
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -70,10 +79,6 @@ export default function DataTable({
         });
     };
 
-    const handleSearch = (e: any) => {
-        e.preventDefault();
-        updateRoute();
-    };
 
     const handlePerPageChange = (e: any) => {
         const newPerPage = e.target.value;
@@ -90,7 +95,7 @@ export default function DataTable({
 
     const formatDate = (dateString: any) => {
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined,options);
+        return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
     const formatDate2 = (dateString: any) => {
@@ -127,7 +132,7 @@ export default function DataTable({
         if (column.type === 'image' && column.design === 'rec') {
             return (
                 <img
-                    src={value}
+                    src={'/storage/'+value}
                     alt={item.name}
                     onError={(e) => {
                         e.currentTarget.onerror = null;
@@ -141,11 +146,11 @@ export default function DataTable({
         if (column.type === 'image' && column.design === 'circle') {
             return (
                 <img
-                    src={value}
+                    src={'/storage/'+value}
                     alt={item.name}
                     onError={(e) => {
                         e.currentTarget.onerror = null;
-                        e.currentTarget.src = '/placeholder.png';
+                        e.currentTarget.src = '/storage/uploads/admins/placeholder.png';
                     }}
                     className="h-10 w-10 rounded-full"
                 />
@@ -220,7 +225,6 @@ export default function DataTable({
             render: renderActions,
         });
     }
-    // @ts-ignore
     return (
         <div className="w-full bg-white dark:bg-gray-900">
             <div className="px-6 py-4">
@@ -240,7 +244,7 @@ export default function DataTable({
                 </div>
 
                 <div className="mb-6 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    <form onSubmit={handleSearch} className="relative flex w-full max-w-md">
+                    <div className="relative flex w-full max-w-md">
                         <input
                             type="text"
                             placeholder={`Search ...`}
@@ -249,13 +253,7 @@ export default function DataTable({
                             onChange={(e) => setSearch(e.target.value)}
                         />
                         <Search className="absolute top-2.5 left-3 h-4 w-4 text-gray-400 dark:text-gray-500" />
-                        <button
-                            type="submit"
-                            className="ml-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:outline-none dark:bg-blue-700 dark:hover:bg-blue-800"
-                        >
-                            Search
-                        </button>
-                    </form>
+                    </div>
 
                     <div className="flex items-center">
                         <label htmlFor="perPage" className="mr-2 text-sm font-medium text-gray-600 dark:text-gray-400">

@@ -12,7 +12,7 @@ export default function DeleteDialog({
     if (!isOpen) return null;
 
     return (
-        <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black" aria-modal="true">
+        <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black/60" aria-modal="true">
             <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                 <h3 className="mb-4 text-lg font-medium text-gray-900">{title}</h3>
                 <p className="mb-5 text-sm text-gray-500">{message}</p>

@@ -11,7 +11,7 @@ class AdminUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,6 +21,7 @@ class AdminUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'name' => 'required|min:3|max:50',
             'email' => 'required|email|unique:users,email,' . $this->route('admin')->id,
