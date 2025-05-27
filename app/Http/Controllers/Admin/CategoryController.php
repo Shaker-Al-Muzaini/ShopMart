@@ -60,14 +60,12 @@ class CategoryController extends Controller
      * Show the form for creating a new resource.
      */
 
-    public function create(Request $request): Response
+    public function create(): Response
     {
         $categories = Category::select('id', 'name')->with("descendants")->isParent()->get();
         $flattenedCategories = $this->flattenCategories($categories);
-
         return Inertia::render('Admin/Categories/Create', [
             'categories' => $flattenedCategories,
-
         ]);
     }
 
@@ -75,9 +73,11 @@ class CategoryController extends Controller
     {
         $data = $request->only('name', 'description', 'parent_id');
 
+
         if ($request->hasFile('image')) {
             $data['image'] = ImageUploader::uploadImage($request->file('image'), 'categories');
         }
+
 
         Category::create($data);
         return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
@@ -86,33 +86,48 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit($id): Response
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->image = asset('storage/' . $category->image);
+        $categories = Category::select('id', 'name')->with("descendants")->isParent()->get();
+        $flattenedCategories = $this->flattenCategories($categories);
+        return Inertia::render('Admin/Categories/Edit', [
+            'category' => $category,
+            'categories' => $flattenedCategories,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(CtaegoryStoreUpdateRequest $request, Category $category): RedirectResponse
     {
-        //
+
+        $data = $request->only('name', 'description', 'parent_id');
+
+        if ($request->hasFile('image')) {
+            ImageUploader::deleteImage($category->image);
+            $data['image'] = ImageUploader::uploadImage($request->file('image'), 'categories');
+        }
+
+        $category->update($data);
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy($id): RedirectResponse
     {
-        //
+        $category = Category::findOrFail($id);
+        ImageUploader::deleteImage($category->image);
+        $category->delete();
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 
     public function flattenCategories($categories, $prefix = '', $result = [])

@@ -11,11 +11,10 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { AlertCircle, ArrowLeft, FileText, ImageIcon, Save, TagIcon, Trash2, Upload, User } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
-    { title: 'categories', href: route('admin.categories.index') },
-    { title: 'Create Category', href: '' },
+    { title: 'Categories', href: route('admin.categories.index') },
+    { title: 'Edit Category', href: '' },
 ];
 
 interface Category {
@@ -34,20 +33,19 @@ interface CategoryWithPath extends Category {
     level: number;
 }
 
-export default function Create({ categories }: { categories: CategoryWithPath[] }) {
+export default function Create({ category, categories }: { category: Category; categories: CategoryWithPath[] }) {
     const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        description: '',
-        parent_id: '',
+        _mehtod: 'PUT',
+        name: category.name,
+        description: category.description,
+        parent_id: category.parent_id !== null ? String(category.parent_id) : 'none',
         image: null as File | null,
     });
 
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(category.image);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [isUploading, setIsUploading] = useState<boolean>(false);
-
-
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -69,7 +67,7 @@ export default function Create({ categories }: { categories: CategoryWithPath[] 
             onSuccess: () => {
                 setIsUploading(false);
                 setUploadProgress(0);
-                toast.success('Category Created successfully');
+                toast.success('Category updated successfully');
             },
             onError: () => {
                 setIsUploading(false);
@@ -114,8 +112,8 @@ export default function Create({ categories }: { categories: CategoryWithPath[] 
                                                 <User className="text-primary dark:text-primary-light" size={24} />
                                             </div>
                                             <div>
-                                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Create Category</h1>
-                                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">Add new category</p>
+                                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Edit Category</h1>
+                                                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300">edit a category</p>
                                             </div>
                                         </div>
 
@@ -209,7 +207,9 @@ export default function Create({ categories }: { categories: CategoryWithPath[] 
                                                         <SelectValue placeholder="Select parent category" />
                                                     </SelectTrigger>
                                                     <SelectContent>
-
+                                                        <SelectItem value="none" className="text-gray-500">
+                                                            No Parent Category
+                                                        </SelectItem>
                                                         {categories &&
                                                             categories.map((category) => (
                                                                 <SelectItem key={category.id} value={String(category.id)} className="pl-2">

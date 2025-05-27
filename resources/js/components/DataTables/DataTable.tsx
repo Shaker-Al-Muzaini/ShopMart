@@ -129,10 +129,19 @@ export default function DataTable({
                 </span>
             );
         }
+        const APP_URL = import.meta.env.VITE_APP_URL ?? 'http://127.0.0.1:8000';
+
+        const getImageUrl = (value: string): string => {
+            if (!value) return '/storage/uploads/placeholder.png';
+            if (value.startsWith('http://') || value.startsWith('https://')) {
+                return value;
+            }
+            return `${APP_URL}/storage/${value}`;
+        };
         if (column.type === 'image' && column.design === 'rec') {
             return (
                 <img
-                    src={'/storage/'+value}
+                    src={getImageUrl(value)}
                     alt={item.name}
                     onError={(e) => {
                         e.currentTarget.onerror = null;
@@ -146,7 +155,7 @@ export default function DataTable({
         if (column.type === 'image' && column.design === 'circle') {
             return (
                 <img
-                    src={'/storage/'+value}
+                    src={getImageUrl(value)}
                     alt={item.name}
                     onError={(e) => {
                         e.currentTarget.onerror = null;
