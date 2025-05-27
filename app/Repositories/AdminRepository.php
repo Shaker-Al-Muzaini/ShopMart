@@ -15,9 +15,7 @@ class AdminRepository {
             ->paginate($filters['perPage']);
     }
 
-    public function findById($id) {
-        return User::where('role', 'admin')->findOrFail($id);
-    }
+
 
     public function create($data) {
         return User::create($data);
