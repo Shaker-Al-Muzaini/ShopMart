@@ -136,7 +136,7 @@ export default function DataTable({
                     alt={item.name}
                     onError={(e) => {
                         e.currentTarget.onerror = null;
-                        e.currentTarget.src = '/placeholder.png';
+                        e.currentTarget.src = '/storage/uploads/admins/placeholder.png';
                     }}
                     className="h-30 w-30"
                 />

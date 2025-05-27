@@ -14,7 +14,8 @@ class Category extends Model
         'parent_id',
         'slug',
         'description',
-        'image'
+        'image',
+        'created_at'
 ];
     protected $casts = [
         'parent_id' => 'integer',

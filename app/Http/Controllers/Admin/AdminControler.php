@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ImageUploader;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminStoreRequest;
 use App\Http\Requests\AdminUpdateRequest;
@@ -70,8 +71,9 @@ class AdminControler extends Controller
         try {
             $data = $request->validated();
 
+
             if ($request->hasFile('avatar')) {
-                $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+                $data['avatar'] = ImageUploader::uploadImage($request->file('avatar'), 'admins');
             }
 
             $this->service->createAdmin($data);
@@ -99,10 +101,8 @@ class AdminControler extends Controller
             $data = $request->validated();
 
             if ($request->hasFile('avatar')) {
-                if ($admin->avatar) {
-                    Storage::disk('public')->delete($admin->avatar);
-                }
-                $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+                ImageUploader::deleteImage($admin->avatar);
+                $data['avatar'] = ImageUploader::uploadImage($request->file('avatar'), 'admins');
             }
 
             $this->service->updateAdmin($admin, $data);
