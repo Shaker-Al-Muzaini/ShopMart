@@ -14,6 +14,7 @@ class Brands extends Model
         'slug',
         'image',
         'status',
+
     ];
     protected $casts = [
         'status' => 'boolean',

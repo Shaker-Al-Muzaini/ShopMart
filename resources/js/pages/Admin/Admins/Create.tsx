@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { AlertCircle, ArrowLeft, ImageIcon, Lock, Mail, Phone, Save, Trash2, Upload, User } from 'lucide-react';
+import { AlertCircle, ArrowLeft, ImageIcon, Lock, Mail, Phone, Save, Trash2, Upload, Briefcase ,User} from 'lucide-react';
 import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -91,7 +91,7 @@ export default function Create() {
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="bg-primary/20 dark:bg-primary/30 rounded-xl p-3 shadow-sm backdrop-blur-sm">
-                                                <User className="text-primary dark:text-primary-light" size={24} />
+                                                <Briefcase className="text-primary dark:text-primary-light" size={24} />
                                             </div>
                                             <div>
                                                 <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Create Admin</h1>

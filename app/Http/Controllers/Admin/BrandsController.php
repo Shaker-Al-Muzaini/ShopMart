@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ImageUploader;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BrandStoreUpdateRequest;
 use App\Models\Brands;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -19,7 +21,7 @@ class BrandsController extends Controller
         $sort = $request->input('sort', 'id');
         $direction = $request->input('direction', 'asc');
 
-        $brands = Brands::select('id', 'name', 'slug', 'image')
+        $brands = Brands::select('id', 'name', 'slug', 'image','created_at')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })
@@ -53,47 +55,52 @@ class BrandsController extends Controller
         return Inertia::render('Admin/Brands/Create');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BrandStoreUpdateRequest $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $data = $request->only('name');
+        if ($request->hasFile('image')) {
+            $data['image'] = ImageUploader::uploadImage($request->file('image'), 'brands');
+        }
+
+        Brands::create($data);
+        return redirect()->route('admin.brands.index')->with('success', 'Brand created successfully.');
+    }
+
+    public function edit($id): \Inertia\Response
+    {
+        $brand = Brands::findOrFail($id);
+        $brand->image = asset('storage/' . $brand->image);
+        return Inertia::render('Admin/Brands/Edit', [
+            'brand' => $brand,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Brands $brands)
+    public function update(BrandStoreUpdateRequest $request, Brands $brand): \Illuminate\Http\RedirectResponse
     {
-        //
+        $data = $request->only('name');
+
+        if ($request->hasFile('image')) {
+            ImageUploader::deleteImage($brand->image);
+            $data['image'] = ImageUploader::uploadImage($request->file('image'), 'brands');
+        }
+
+        $brand->update($data);
+        return redirect()->route('admin.brands.index')->with('success', 'Brand updated successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Brands $brands)
+    public function destroy($id): \Illuminate\Http\RedirectResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Brands $brands)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Brands $brands)
-    {
-        //
+        $brand = Brands::findOrFail($id);
+        ImageUploader::deleteImage($brand->image);
+        $brand->delete();
+        return redirect()->route('admin.brands.index')->with('success', 'Brand deleted successfully.');
     }
 }
