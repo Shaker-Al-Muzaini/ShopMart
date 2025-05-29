@@ -1,9 +1,7 @@
-
 import DataTable from '@/components/DataTables/DataTable';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
-import {Sigma } from 'lucide-react';
-import { toast } from 'react-toastify'
+import { TagIcon } from 'lucide-react';
 
 export default function ProductIndex() {
     const { products, filters, can } = usePage().props;
@@ -25,20 +23,20 @@ export default function ProductIndex() {
     ];
 
     const handleDelete = (id: string) => {
-        router.delete(route('admin.Product.destroy', id), {
+        router.delete(route('admin.products.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Product deleted successfully');
+                // toast.success('User deleted successfully');
             },
             onError: () => {
-                toast.error('Product deletion failed');
+                // toast.error('User deletion failed');
             },
         });
     };
 
     return (
         <AppLayout>
-            <Head title="Broducts" />
+            <Head title="Products" />
             <div className="py-6">
                 <div className="mx-auto">
                     <DataTable
@@ -56,7 +54,7 @@ export default function ProductIndex() {
                         viewRoute="admin.products.show"
                         editRoute="admin.products.edit"
                         onDelete={handleDelete}
-                        icon={Sigma}
+                        icon={TagIcon}
                     />
                 </div>
             </div>

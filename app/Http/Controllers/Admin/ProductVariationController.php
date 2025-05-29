@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VariationStoreUpdateRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Services\ProductService;
 
 class ProductVariationController extends Controller
 {
@@ -33,7 +35,7 @@ class ProductVariationController extends Controller
      *
      * @param Request $request
      * @param Product $product
-     * @return JsonResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(VariationStoreUpdateRequest $request, Product $product)
     {

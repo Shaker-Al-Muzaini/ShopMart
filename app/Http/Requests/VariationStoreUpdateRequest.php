@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProductStoreUpdateRequest extends FormRequest
+class VariationStoreUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class ProductStoreUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'variations' => 'required|array',
+            'variations.*.quantity' => 'required|numeric|min:0',
+            'variations.*.price' => 'required|numeric|min:0',
+            'variations.*.variation_type_*' => 'required|array',
         ];
     }
 }

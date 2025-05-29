@@ -25,7 +25,7 @@ class ProductController extends Controller
         $sort = $request->input('sort', 'id');
         $direction = $request->input('direction', 'asc');
 
-        $products = Product::select('id', 'name', 'slug')
+        $products = Product::select('id', 'name', 'slug','created_at')
             ->when($search, function ($query, $search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })
@@ -69,6 +69,7 @@ class ProductController extends Controller
     {
         $data = $request->only('name', 'description', 'status', 'brand_id', 'category_id', 'price', 'quantity', 'barcode', 'sku');
         $product = Product::create($data);
+
         return redirect()->route('admin.products.edit', $product->id)->with('success', 'Product created successfully.');
     }
 
