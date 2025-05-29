@@ -3,25 +3,21 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import {LayoutGrid ,Users,Briefcase,TagIcon,ShoppingBag} from 'lucide-react';
+import {LayoutGrid ,Users,Briefcase,TagIcon,ShoppingBag,Sigma} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: 'admin/dashboard',
+        href: '/admin/dashboard',
         icon: LayoutGrid,
     },
     {
-        title: 'Admins',
-        href: '/admin/admins',
-        icon: Briefcase,
+        title: 'Product',
+        href: '/admin/products',
+        icon: Sigma,
     },
-    {
-        title: 'Users',
-        href: '/admin/users',
-        icon: Users,
-    },
+
     {
         title: 'Categories',
         href: '/admin/categories',
@@ -32,6 +28,16 @@ const mainNavItems: NavItem[] = [
         href: '/admin/brands',
         icon: ShoppingBag,
     },
+    {
+        title: 'Admins',
+        href: '/admin/admins',
+        icon: Briefcase,
+    },
+    {
+        title: 'Users',
+        href: '/admin/users',
+        icon: Users,
+    }
 ];
 
 
