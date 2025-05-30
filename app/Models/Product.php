@@ -61,4 +61,16 @@ class Product extends Model implements HasMedia
     {
         return $this->hasMany(ProductVariation::class);
     }
+    public function getFirstImageUrl(string $collectionName = 'images', string $conversion = 'thumb'): ?string
+    {
+        if($this->options()->count() > 0) {
+            foreach ($this->options as $option) {
+                $imageUrl = $option->getFirstMediaUrl($collectionName,$conversion);
+                if ($imageUrl) {
+                    return $imageUrl;
+                }
+            }
+        }
+        return $this->getFirstMediaUrl($collectionName, $conversion);
+    }
 }

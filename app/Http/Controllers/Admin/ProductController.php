@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\ImageUploader;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductStoreRequest;
-use App\Http\Requests\ProductStoreUpdateRequest;
 use App\Http\Requests\ProductUpdateRequest;
 
 use App\Models\Brands;
@@ -33,7 +32,7 @@ class ProductController extends Controller
             ->paginate($perPage)->withQueryString();
 
         $products->getCollection()->transform(function ($product) {
-            $product->image = asset('storage/' . $product->image);
+            $product->image = $product->getFirstImageUrl('images','thumb');
             return $product;
         });
 

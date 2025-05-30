@@ -141,7 +141,7 @@ export default function DataTable({
         if (column.type === 'image' && column.design === 'rec') {
             return (
                 <img
-                    src={getImageUrl(value)}
+                    src={getImageUrl(value).replace('localhost', '127.0.0.1:8000')}
                     alt={item.name}
                     onError={(e) => {
                         e.currentTarget.onerror = null;
@@ -155,7 +155,7 @@ export default function DataTable({
         if (column.type === 'image' && column.design === 'circle') {
             return (
                 <img
-                    src={getImageUrl(value)}
+                    src={getImageUrl(value).replace('localhost', '127.0.0.1:8000')}
                     alt={item.name}
                     onError={(e) => {
                         e.currentTarget.onerror = null;
