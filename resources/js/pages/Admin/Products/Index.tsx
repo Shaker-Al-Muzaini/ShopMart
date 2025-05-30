@@ -2,7 +2,7 @@ import DataTable from '@/components/DataTables/DataTable';
 import AppLayout from '@/layouts/app-layout';
 import { Head, router, usePage } from '@inertiajs/react';
 import { TagIcon } from 'lucide-react';
-
+import { toast } from 'react-toastify';
 export default function ProductIndex() {
     const { products, filters, can } = usePage().props;
     const columns = [
@@ -26,10 +26,10 @@ export default function ProductIndex() {
         router.delete(route('admin.products.destroy', id), {
             preserveScroll: true,
             onSuccess: () => {
-                // toast.success('User deleted successfully');
+                 toast.success('Protract deleted successfully');
             },
             onError: () => {
-                // toast.error('User deletion failed');
+                 toast.error('Protract deletion failed');
             },
         });
     };

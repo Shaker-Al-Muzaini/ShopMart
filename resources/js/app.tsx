@@ -7,6 +7,7 @@ import { initializeTheme } from './hooks/use-appearance';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+import ErrorBoundary from './Components/ErrorBoundary';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -16,7 +17,9 @@ createInertiaApp({
 
         root.render(
             <>
-                <App {...props} />
+                <ErrorBoundary>
+                    <App {...props} />
+                </ErrorBoundary>
                 <ToastContainer position="top-right" autoClose={3000} />
             </>
         );
@@ -26,5 +29,4 @@ createInertiaApp({
     },
 });
 
-// This will set light / dark mode on load...
 initializeTheme();

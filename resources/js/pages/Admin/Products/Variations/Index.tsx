@@ -6,6 +6,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react
 import { useForm } from '@inertiajs/react';
 import { ChevronUpIcon, Layers } from 'lucide-react';
 import ProductLayout from '../ProductLayout';
+import { toast } from 'react-toastify';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
@@ -66,11 +67,13 @@ export default function ProductVariations({ product, variationsLists }: { produc
     const handleSubmit = () => {
         post(route('admin.products.variations.update', product.id), {
             preserveScroll: true,
+            onSuccess: () => {
+                toast.success('variations Add successfully');
+
+            },
             onError: (errors) => {
                 console.log('Validation errors:', errors);
-            },
-            onSuccess: () => {
-                // Handle successful submission
+                toast.error('variations Add failed');
             },
         });
     };

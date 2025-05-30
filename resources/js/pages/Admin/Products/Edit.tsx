@@ -8,7 +8,7 @@ import JoditEditor from 'jodit-react';
 import { AlertCircle, Diamond, List, Save, TagIcon, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import ProductLayout from './ProductLayout';
-
+import { toast } from 'react-toastify';
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
     { title: 'Products', href: route('admin.products.index') },
@@ -81,9 +81,11 @@ export default function Edit({ product, categories, brands }: Props) {
             },
             preserveScroll: true,
             onSuccess: () => {
+                toast.success('Protract update successfully');
                 // Handle success
             },
             onError: () => {
+                toast.error('Protract update failed');
                 // Handle error
             },
         });

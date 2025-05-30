@@ -9,6 +9,7 @@ import { Images, Trash2, Upload } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import ProductLayout from '../ProductLayout';
+import { toast } from 'react-toastify';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
@@ -85,9 +86,12 @@ export default function ProductImages({ product, images }: { product: Product; i
                 setIsUploading(false);
                 setSelectedFiles([]);
                 setPreviews([]);
+                toast.success('Images Add successfully');
             },
             onError: () => {
                 setIsUploading(false);
+                toast.error('Images Add failed');
+
             },
         });
     };

@@ -9,7 +9,6 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import JoditEditor from 'jodit-react';
 import { AlertCircle, ArrowLeft, Diamond, File, List, Save, TagIcon } from 'lucide-react';
 import { useRef } from 'react';
-
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
     { title: 'Products', href: route('admin.products.index') },

@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, Images, Layers, Plus, Save, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ProductLayout from '../ProductLayout';
+import { toast } from 'react-toastify';
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
     { title: 'Products', href: route('admin.products.index') },
@@ -144,10 +145,13 @@ export default function VariationTypes({ product, variationTypesLists }: { produ
             onSuccess: () => {
                 setIsUploading(false);
                 setValidationErrors({});
+                toast.success('variationsTypes Add successfully');
             },
             onError: (errors) => {
                 setIsUploading(false);
                 setValidationErrors(errors);
+                toast.error('variationsTypes Add failed');
+
             },
         });
     };
