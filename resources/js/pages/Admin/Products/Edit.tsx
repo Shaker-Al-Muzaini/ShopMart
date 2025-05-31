@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BreadcrumbItem } from '@/types';
 import { router, useForm } from '@inertiajs/react';
 import JoditEditor from 'jodit-react';
-import { AlertCircle, Diamond, List, Save, TagIcon, Trash2 } from 'lucide-react';
+import { AlertCircle, Package, List, Save, TagIcon, Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import ProductLayout from './ProductLayout';
 import { toast } from 'react-toastify';
@@ -105,7 +105,7 @@ export default function Edit({ product, categories, brands }: Props) {
             description="Edit product details and information."
             breadcrumbs={breadcrumbs}
             backUrl={route('admin.products.index')}
-            icon={<Diamond size={20} className="text-primary dark:text-primary-light" />}
+            icon={<Package size={20} className="text-primary dark:text-primary-light" />}
             productId={product.id}
             activeTab="edit"
         >

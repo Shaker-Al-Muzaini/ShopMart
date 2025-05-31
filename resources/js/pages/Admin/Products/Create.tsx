@@ -7,7 +7,7 @@ import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import JoditEditor from 'jodit-react';
-import { AlertCircle, ArrowLeft, Diamond, File, List, Save, TagIcon } from 'lucide-react';
+import { AlertCircle, ArrowLeft, Package, File, List, Save, TagIcon } from 'lucide-react';
 import { useRef } from 'react';
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
@@ -67,7 +67,7 @@ export default function Create({ categories, brands }: Props) {
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <div className="flex items-center gap-4">
                                 <div className="bg-primary/20 dark:bg-primary/30 rounded-xl p-3 shadow-sm backdrop-blur-sm">
-                                    <Diamond className="text-primary dark:text-primary-light" size={24} />
+                                    <Package className="text-primary dark:text-primary-light" size={24} />
                                 </div>
                                 <div>
                                     <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Create Product</h1>
