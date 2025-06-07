@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import Header from '@/components/ecommerce/Header';
 import Footer from '@/components/ecommerce/Footer';
 import React from 'react';
+import "../../css/fronend.css"
 
 interface EcommelLayoutProps {
     children: React.ReactNode;
