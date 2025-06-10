@@ -73,4 +73,33 @@ class Product extends Model implements HasMedia
         }
         return $this->getFirstMediaUrl($collectionName, $conversion);
     }
+    public function getPriceForFirstOption()
+    {
+        $firstOptions = $this->getFirstOptionMap();
+        if ($firstOptions) {
+           return $this->getpriceForOptions($firstOptions);
+        }
+        return $this->price;
+    }
+    public function getFirstOptionMap()
+    {
+       return $this->variationTypes->mapWithKeys(fn($type)
+       =>[$type->id=>$type->options[0]->id])->toArray();
+
+
+    }
+    public function getpriceForOptions(array $optionsIds=[])
+    {
+       $optionsIds=array_values($optionsIds);
+       sort($optionsIds);
+       $optionsIds->josn_encode($optionsIds);
+       foreach ($this->variations as $variation) {
+           $a=$variation->variation_type_options_ids;
+           if ($optionsIds == $a) {
+               return $variation->price !== null ? $variation->price : $this->price;
+           }
+       }
+         return $this->price;
+    }
+
 }
