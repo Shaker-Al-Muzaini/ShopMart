@@ -1,5 +1,13 @@
 import React from 'react';
 import { ProductListItem } from '@/types';
+import {
+    FaShoppingCart,
+    FaHeart,
+    FaSearch,
+    FaStar,
+    FaStarHalfAlt,
+    FaRegStar,
+} from "react-icons/fa";
 
 interface ProductCardProps {
     product: ProductListItem;
@@ -26,15 +34,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     </div>
                 )}
 
-                <div className="absolute inset-0 z-20 flex items-center justify-center  bg-opacity-40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-opacity-40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <button className="mx-2 rounded-full bg-white p-3 text-gray-800 transition hover:bg-indigo-600 hover:text-white">
-                        <i className="fas fa-shopping-cart"></i>
+                        <FaShoppingCart />
                     </button>
                     <button className="mx-2 rounded-full bg-white p-3 text-gray-800 transition hover:bg-indigo-600 hover:text-white">
-                        <i className="fas fa-heart"></i>
+                        <FaHeart />
                     </button>
                     <button className="mx-2 rounded-full bg-white p-3 text-gray-800 transition hover:bg-indigo-600 hover:text-white">
-                        <i className="fas fa-search"></i>
+                        <FaSearch />
                     </button>
                 </div>
             </div>
@@ -55,11 +63,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         )}
                     </span>
                     <div className="flex text-yellow-400">
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star"></i>
-                        <i className="fas fa-star-half-alt"></i>
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStarHalfAlt />
                     </div>
                 </div>
             </div>
