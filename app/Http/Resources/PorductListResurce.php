@@ -18,9 +18,16 @@ class PorductListResurce extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'description' => $this->description,
             'price' => $this->getPriceForFirstOption(),
-            'quantity' => $this->getFirstImageUrl('images', 'small'),
+            'image' => $this->getFirstImageUrl('images', 'small'),
+            'quantity' => $this->quantity,
+            'isDiscounted' => $this->false,
+            'discount'=>0
+
+
         ];
 
     }
+
 }
