@@ -1,6 +1,5 @@
 import { usePage } from '@inertiajs/react';
 import ProductCard from '@/components/ecommerce/HomePage/ProductCard';
-import { ProductListItem } from '@/types';
 import React from 'react';
 
 export default function BestSeller() {
@@ -16,7 +15,7 @@ export default function BestSeller() {
                     </a>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className= "text-black grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {best_SellingProducts.length > 0 ? (
                         best_SellingProducts.map((product: any) => (
                             <ProductCard key={product.id} product={product} />

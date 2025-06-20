@@ -1,4 +1,5 @@
 import React from 'react';
+import { router } from '@inertiajs/react';
 import { ProductListItem } from '@/types';
 import {
     FaShoppingCart,
@@ -6,7 +7,6 @@ import {
     FaSearch,
     FaStar,
     FaStarHalfAlt,
-    FaRegStar,
 } from "react-icons/fa";
 
 interface ProductCardProps {
@@ -20,6 +20,9 @@ const stripHtml = (html: string) => {
 
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+    const handleDetail = (slug: string) => {
+        router.visit(route('product.detail', { slug }));
+    };
     return (
         <div className="group overflow-hidden rounded-lg bg-white shadow-sm">
             <div className="relative">
@@ -34,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     </div>
                 )}
 
-                <div className="absolute inset-0 z-20 flex items-center justify-center bg-opacity-40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <button className="mx-2 rounded-full bg-white p-3 text-gray-800 transition hover:bg-indigo-600 hover:text-white">
                         <FaShoppingCart />
                     </button>
@@ -47,7 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 </div>
             </div>
 
-            <div className="p-4">
+            <div className="p-4" onClick={() => handleDetail(product.slug)}>
                 <h3 className="mb-2 text-lg font-medium">{product.name}</h3>
                 <p className="mb-3 text-sm text-gray-600">
                     {stripHtml(product.description).substring(0, 100)}...

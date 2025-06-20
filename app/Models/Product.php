@@ -13,6 +13,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+
 class Product extends Model implements HasMedia
 {
     use HasSlug, InteractsWithMedia;
@@ -102,6 +103,36 @@ class Product extends Model implements HasMedia
 
         return $this->price;
     }
+    public function getImages()
+    {
+        if ($this->options->count() > 0) {
+            foreach ($this->options as $option){
+                $images = $option->getMedia('images');
+            if ($images->count() > 0) {
+                return $images;
+            }
+        }
+    }
+        return $this->getMedia('images');
+    }
+    public function getImagesForOptions(array $optionsIds = null)
+    {
+        if ($optionsIds) {
+            $optionsIds = array_values($optionsIds);
+            sort($optionsIds);
+            $options = $this->variationTypes::whereIn('id', $optionsIds)->get();
+            foreach ($options as $option) {
+                $image= $option->getFirstImageUrl('images','small');
+                if ($image) {
+                 return   $image;
+                }
+            }
+
+        }
+
+        return $this->getFirstImageUrl('images', 'small')?:asset('/storage/uploads/admins/placeholder.png');
+    }
+
 
 
 }

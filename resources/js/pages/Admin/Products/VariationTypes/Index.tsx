@@ -273,7 +273,7 @@ export default function VariationTypes({ product, variationTypesLists }: { produ
                 <div className="mt-4 grid grid-cols-4 gap-4">
                     {variationTypes[typeIndex].options[optionIndex].existingImages.map((image, index) => (
                         <div key={image.id} className="group relative">
-                            <img src={image.url} alt={`Existing ${index + 1}`} className="h-24 w-full rounded-lg object-cover" />
+                            <img src={image.url.replace('localhost', '127.0.0.1:8000')} alt={`Existing ${index + 1}`} className="h-24 w-full rounded-lg object-cover" />
                             <button
                                 type="button"
                                 onClick={() => {

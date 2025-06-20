@@ -9,6 +9,8 @@ Route::get('/',[HomeController::class,'index']);
 Route::get('/index', function () {
     return Inertia::render('welcome');
 })->name('home');
+Route::get('/product/{slug}',[HomeController::class,'productDetail'])->name('product.detail');
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

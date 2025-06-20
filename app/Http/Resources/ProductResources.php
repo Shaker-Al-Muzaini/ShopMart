@@ -16,7 +16,7 @@ class ProductResources extends JsonResource
     {
         $options = $request->input('options') ?: [];
         if ($options) {
-            $images = $this->getFirstImageUrl($options);
+            $images = $this->getImagesForOptions($options);
         } else {
             $images = $this->getImages();
         }
@@ -64,6 +64,8 @@ class ProductResources extends JsonResource
                     'variation_type_option_ids' => $variation->variation_type_option_ids,
                 ];
             }),
+            'rating' => 4,
+            'reviews_count' => 100
         ];
     }
 }

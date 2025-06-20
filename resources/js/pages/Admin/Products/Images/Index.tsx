@@ -11,6 +11,7 @@ import { useDropzone } from 'react-dropzone';
 import ProductLayout from '../ProductLayout';
 import { toast } from 'react-toastify';
 
+
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: 'dashboard' },
     { title: 'Products', href: route('admin.products.index') },
@@ -31,6 +32,7 @@ interface ProductImage {
 }
 
 export default function ProductImages({ product, images }: { product: Product; images: ProductImage[] }) {
+    const [uploadProgress, setUploadProgress] = useState<number | null>(null);
     const [productImages, setProductImages] = useState<ProductImage[]>(images || []);
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [previews, setPreviews] = useState<string[]>([]);
@@ -78,9 +80,7 @@ export default function ProductImages({ product, images }: { product: Product; i
         setIsUploading(true);
         router.post(route('admin.products.images.store', product.id), formData, {
             onProgress: (progress) => {
-                if (progress.percentage) {
-                    setUploadProgress(progress.percentage);
-                }
+                progress?.percentage != null
             },
             onSuccess: () => {
                 setIsUploading(false);
