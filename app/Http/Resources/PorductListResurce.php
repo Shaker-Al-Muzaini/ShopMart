@@ -18,6 +18,7 @@ class PorductListResurce extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'category_id' => $this->category_id,
             'description' => $this->description,
             'price' => $this->getPriceForFirstOption(),
             'image' => $this->getFirstImageUrl('images', 'small'),

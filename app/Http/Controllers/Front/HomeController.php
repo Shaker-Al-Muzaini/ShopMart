@@ -31,18 +31,22 @@ class HomeController extends Controller
             'brands' => $brands,
         ]);
     }
-    public function productDetail(Request $request ,$slug)
+    public function productDetail(Request $request, $slug)
     {
-        $product=Product::where('slug',$slug)->firstOrFail();
-        $productResources=new ProductResources($product);
-        $relatedProducts=PorductListResurce::collection(
-            Product::where('category_id',$product->category_id)
-            ->where('id','!=',$product->id)
-            ->limit(4)
-            ->get()
+
+        $product = Product::where('slug', $slug)->firstOrFail();
+        $productResource = new ProductResources($product);
+        $relatedProducts = PorductListResurce::collection(
+            Product::where('category_id', $product->category_id)
+                ->where('id', '!=', $product->id)
+                ->limit(4)
+                ->get()
         );
-        return inertia::render('Ecommerce/ProductDetail', [
-            'product' => $productResources->resolve(),
+
+
+        return Inertia::render('Ecommerce/ProductDetail', [
+            'product' => $productResource->resolve(),
+            'variationOptions' => request('options', []),
             'relatedProducts' => $relatedProducts->resolve(),
         ]);
     }

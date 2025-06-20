@@ -7,19 +7,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResources extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         $options = $request->input('options') ?: [];
-        if ($options) {
-            $images = $this->getImagesForOptions($options);
-        } else {
-            $images = $this->getImages();
-        }
+
+        // صور المنتج حسب الخيارات أو صور عامة
+        $images = $options ? $this->getImagesForOptions($options) : $this->getImages();
 
         return [
             'id' => $this->id,
@@ -28,7 +21,8 @@ class ProductResources extends JsonResource
             'price' => $this->price,
             'quantity' => $this->quantity,
             'image' => $this->getFirstImageUrl('images'),
-            'images' => $images->map(function ($image) {
+
+            'images' => collect($images)->map(function ($image) {
                 return [
                     'id' => $image->id,
                     'thumb' => $image->getUrl('thumb'),
@@ -36,6 +30,7 @@ class ProductResources extends JsonResource
                     'large' => $image->getUrl('large'),
                 ];
             }),
+
             'variationTypes' => $this->variationTypes->map(function ($variationType) {
                 return [
                     'id' => $variationType->id,
@@ -56,6 +51,7 @@ class ProductResources extends JsonResource
                     }),
                 ];
             }),
+
             'variations' => $this->variations->map(function ($variation) {
                 return [
                     'id' => $variation->id,
@@ -64,8 +60,9 @@ class ProductResources extends JsonResource
                     'variation_type_option_ids' => $variation->variation_type_option_ids,
                 ];
             }),
+
             'rating' => 4,
-            'reviews_count' => 100
+            'reviews_count' => 100,
         ];
     }
 }

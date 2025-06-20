@@ -1,14 +1,8 @@
-import { EcomLayout } from '@/layouts/ecom-layout';
-import ProductCard from '@/components/ecommerce/HomePage/ProductCard';
 import { Link, router, useForm, usePage } from '@inertiajs/react';
-import { FaFacebook, FaHeart,
-    FaInstagram, FaLock, FaMinus,
-    FaPlus,FaSyncAlt, FaShieldAlt,
-    FaShoppingCart, FaStar, FaStarHalfAlt,
-    FaTwitter, FaBolt
-} from 'react-icons/fa';
-
+import { Facebook, Heart, Instagram, Lock, Minus, Plus, RefreshCw, Shield, ShoppingCart, Star, StarHalf, Twitter, Zap } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import ProductCard from '@/components/ecommerce/HomePage/ProductCard';
+import { EcomLayout } from '@/layouts/ecom-layout';
 
 interface VariationOption {
     id: number;
@@ -336,11 +330,11 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                                         {[...Array(5)].map((_, index) => {
                                             const rating = product.rating;
                                             if (index + 1 <= Math.floor(rating)) {
-                                                return <FaStar key={index} className="fill-current" size={16} />;
+                                                return <Star key={index} className="fill-current" size={16} />;
                                             } else if (index < rating) {
-                                                return <FaStarHalfAlt key={index} className="fill-current" size={16} />;
+                                                return <StarHalf key={index} className="fill-current" size={16} />;
                                             }
-                                            return <FaStar key={index} size={16} />;
+                                            return <Star key={index} size={16} />;
                                         })}
                                     </div>
                                     <span className="ml-2 text-gray-600">
@@ -356,7 +350,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
 
                                 <div className="mb-4 flex items-center text-sm text-gray-500">
                                     <span className="mr-4 flex items-center">
-                                        <FaShieldAlt className="mr-1 text-green-500" size={16} />
+                                        <Shield className="mr-1 text-green-500" size={16} />
                                         {computedProduct.quantity && computedProduct.quantity !== Number.MAX_VALUE
                                             ? `In Stock (${computedProduct.quantity} available)`
                                             : computedProduct.quantity === Number.MAX_VALUE
@@ -364,7 +358,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                                                 : 'Out of Stock'}
                                     </span>
                                     <span className="flex items-center">
-                                        <FaSyncAlt className="mr-1 text-blue-500" size={16} />
+                                        <RefreshCw className="mr-1 text-blue-500" size={16} />
                                         Free Shipping
                                     </span>
                                 </div>
@@ -398,14 +392,14 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                             ))}
 
                             {/* Quantity Selector */}
-                            <div className="mb-6">
+                            <div className="text-black mb-6">
                                 <h3 className="mb-2 font-semibold text-gray-800">Quantity</h3>
                                 <div className="flex w-32 items-center rounded-md border">
                                     <button
                                         onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                                         className="px-3 py-1 text-gray-600 hover:text-indigo-600"
                                     >
-                                        <FaMinus size={16} />
+                                        <Minus size={16} />
                                     </button>
                                     <input
                                         type="number"
@@ -415,7 +409,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                                         className="w-12 border-none text-center focus:ring-0"
                                     />
                                     <button onClick={() => setQuantity((q) => q + 1)} className="px-3 py-1 text-gray-600 hover:text-indigo-600">
-                                        <FaPlus size={16} />
+                                        <Plus size={16} />
                                     </button>
                                 </div>
                             </div>
@@ -426,19 +420,19 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                                     disabled={!computedProduct.quantity || computedProduct.quantity === 0}
                                     className="flex flex-1 items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-400"
                                 >
-                                    <FaShoppingCart className="mr-2" size={20} /> Add to Cart
+                                    <ShoppingCart className="mr-2" size={20} /> Add to Cart
                                 </button>
                                 <button
                                     disabled={!computedProduct.quantity || computedProduct.quantity === 0}
                                     className="flex flex-1 items-center justify-center rounded-md bg-gray-800 px-6 py-3 text-white hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-400"
                                 >
-                                    <FaBolt className="mr-2" size={20} /> Buy Now
+                                    <Zap className="mr-2" size={20} /> Buy Now
                                 </button>
                                 <button className="rounded-md border border-gray-300 p-3 text-gray-600 hover:bg-gray-100">
-                                    <FaHeart size={20} />
+                                    <Heart size={20} />
                                 </button>
                                 <button className="rounded-md border border-gray-300 p-3 text-gray-600 hover:bg-gray-100">
-                                    <FaSyncAlt size={20} />
+                                    <RefreshCw size={20} />
                                 </button>
                             </div>
 
@@ -446,15 +440,15 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                             <div className="border-t pt-4">
                                 <div className="flex flex-col text-sm text-gray-600 sm:flex-row sm:items-center">
                                     <div className="mb-2 flex items-center sm:mr-6 sm:mb-0">
-                                        <FaShieldAlt className="mr-2 text-indigo-500" size={16} />
+                                        <Shield className="mr-2 text-indigo-500" size={16} />
                                         <span>1 Year Warranty</span>
                                     </div>
                                     <div className="mb-2 flex items-center sm:mr-6 sm:mb-0">
-                                        <FaSyncAlt className="mr-2 text-indigo-500" size={16} />
+                                        <RefreshCw className="mr-2 text-indigo-500" size={16} />
                                         <span>30-Day Return Policy</span>
                                     </div>
                                     <div className="flex items-center">
-                                        <FaLock className="mr-2 text-indigo-500" size={16} />
+                                        <Lock className="mr-2 text-indigo-500" size={16} />
                                         <span>Secure Checkout</span>
                                     </div>
                                 </div>
@@ -464,13 +458,13 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                                     <span className="mr-2 text-gray-600">Share:</span>
                                     <div className="flex space-x-2">
                                         <a href="#" className="text-gray-500 hover:text-blue-600">
-                                            <FaFacebook size={16} />
+                                            <Facebook size={16} />
                                         </a>
                                         <a href="#" className="text-gray-500 hover:text-blue-400">
-                                            <FaTwitter size={16} />
+                                            <Twitter size={16} />
                                         </a>
                                         <a href="#" className="text-gray-500 hover:text-pink-600">
-                                            <FaInstagram size={16} />
+                                            <Instagram size={16} />
                                         </a>
                                     </div>
                                 </div>
@@ -520,7 +514,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                                         'Experience music like never before with our premium Wireless Noise Cancelling Headphones. Designed for the ultimate listening experience, these headphones combine cutting-edge technology with superior comfort.'}
                                 </p>
                                 <p className="mb-4 text-gray-600">
-                                    The active noise cancellation technology bFaLocks out ambient sounds, allowing you to focus on your music, podcast,
+                                    The active noise cancellation technology blocks out ambient sounds, allowing you to focus on your music, podcast,
                                     or call without distractions. With crystal-clear sound quality and deep, rich bass, these headphones deliver an
                                     immersive audio experience that brings your music to life.
                                 </p>
@@ -610,7 +604,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                 </div>
 
                 {/* Related Products */}
-                <div className="mt-12 bg-white py-12">
+                <div className="text-black mt-12 bg-white py-12">
                     <div className="container mx-auto px-4">
                         <div className="mb-8 flex items-center justify-between">
                             <h2 className="text-2xl font-bold">Related Products</h2>

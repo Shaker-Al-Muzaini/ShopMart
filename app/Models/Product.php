@@ -13,7 +13,6 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-
 class Product extends Model implements HasMedia
 {
     use HasSlug, InteractsWithMedia;
@@ -26,6 +25,7 @@ class Product extends Model implements HasMedia
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
+
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')->width(100);
@@ -55,18 +55,26 @@ class Product extends Model implements HasMedia
 
     public function options(): HasManyThrough
     {
-        return $this->hasManyThrough(VariationTypeOption::class, VariationType::class, 'product_id', 'variation_type_id', 'id', 'id');
+        return $this->hasManyThrough(
+            VariationTypeOption::class,
+            VariationType::class,
+            'product_id',
+            'variation_type_id',
+            'id',
+            'id'
+        );
     }
 
     public function variations(): HasMany
     {
         return $this->hasMany(ProductVariation::class);
     }
+
     public function getFirstImageUrl(string $collectionName = 'images', string $conversion = 'thumb'): ?string
     {
-        if($this->options()->count() > 0) {
+        if ($this->options()->count() > 0) {
             foreach ($this->options as $option) {
-                $imageUrl = $option->getFirstMediaUrl($collectionName,$conversion);
+                $imageUrl = $option->getFirstMediaUrl($collectionName, $conversion);
                 if ($imageUrl) {
                     return $imageUrl;
                 }
@@ -74,26 +82,27 @@ class Product extends Model implements HasMedia
         }
         return $this->getFirstMediaUrl($collectionName, $conversion);
     }
+
     public function getPriceForFirstOption()
     {
         $firstOptions = $this->getFirstOptionMap();
-        if ($firstOptions) {
-           return $this->getpriceForOptions($firstOptions);
-        }
-        return $this->price;
+        return $firstOptions
+            ? $this->getpriceForOptions($firstOptions)
+            : $this->price;
     }
+
     public function getFirstOptionMap()
     {
-       return $this->variationTypes->mapWithKeys(fn($type)
-       =>[$type->id=>$type->options[0]->id])->toArray();
-
-
+        return $this->variationTypes->mapWithKeys(function ($type) {
+            return [$type->id => $type->options[0]->id];
+        })->toArray();
     }
+
     public function getpriceForOptions(array $optionsIds = [])
     {
         $optionsIds = array_values($optionsIds);
         sort($optionsIds);
-        json_encode($optionsIds);
+
         foreach ($this->variations as $variation) {
             $a = $variation->variation_type_options_ids;
             if ($optionsIds == $a) {
@@ -103,36 +112,35 @@ class Product extends Model implements HasMedia
 
         return $this->price;
     }
+
     public function getImages()
     {
         if ($this->options->count() > 0) {
-            foreach ($this->options as $option){
+            foreach ($this->options as $option) {
                 $images = $option->getMedia('images');
-            if ($images->count() > 0) {
-                return $images;
-            }
-        }
-    }
-        return $this->getMedia('images');
-    }
-    public function getImagesForOptions(array $optionsIds = null)
-    {
-        if ($optionsIds) {
-            $optionsIds = array_values($optionsIds);
-            sort($optionsIds);
-            $options = $this->variationTypes::whereIn('id', $optionsIds)->get();
-            foreach ($options as $option) {
-                $image= $option->getFirstImageUrl('images','small');
-                if ($image) {
-                 return   $image;
+                if ($images->count() > 0) {
+                    return $images;
                 }
             }
-
         }
-
-        return $this->getFirstImageUrl('images', 'small')?:asset('/storage/uploads/admins/placeholder.png');
+        return $this->getMedia('images');
     }
 
+    public function getImagesForOptions(array $optionsIds = []): \Illuminate\Support\Collection
+    {
+        $images = collect();
 
+        $matchedOptions = $this->options()->whereIn('variation_type_options.id', $optionsIds)->get();
 
+        foreach ($matchedOptions as $option) {
+            $mediaItems = $option->getMedia('images');
+            if ($mediaItems->isNotEmpty()) {
+                $images = $images->merge($mediaItems);
+            }
+        }
+
+        return $images->isNotEmpty()
+            ? $images
+            : $this->getMedia('images');
+    }
 }
