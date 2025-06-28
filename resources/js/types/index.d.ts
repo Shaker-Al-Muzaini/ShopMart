@@ -20,8 +20,6 @@ export interface ProductListItem{
     description: string;
     price: number;
     image: string;
-    isDiscount?: boolean;
-    discount?: string;
     isNew?: boolean;
     rating?: number;
     [key: string]: unknown;

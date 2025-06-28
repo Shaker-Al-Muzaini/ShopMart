@@ -259,6 +259,20 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
             }
         }
     };
+    const addToCart = () => {
+        form.post(route('cart.store', product.id), {
+            preserveScroll: true,
+            preserveState: true,
+            onError: (err: any) => {
+                console.log(err)
+            },
+            onSuccess: () => {
+                // You can add a success notification here
+                console.log('Product added to cart successfully')
+            },
+        })
+    }
+
 
     return (
         <EcomLayout>
@@ -278,6 +292,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                     </div>
                 </div>
             </div>
+
 
             {/* Main Content */}
             <div className="container mx-auto px-4 py-8">
@@ -417,6 +432,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
                             {/* Action Buttons */}
                             <div className="mb-6 flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                                 <button
+                                    onClick={addToCart}
                                     disabled={!computedProduct.quantity || computedProduct.quantity === 0}
                                     className="flex flex-1 items-center justify-center rounded-md bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-gray-400"
                                 >
@@ -615,7 +631,7 @@ const ProductDetail = ({ product, variationOptions, relatedProducts }: ProductDe
 
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                             {relatedProducts.map((product) => (
-                                <ProductCard key={product.id} {...product} image={getSafeImageUrl(product.image)} />
+                                <ProductCard key={product.id} product={product} />
                             ))}
                         </div>
                     </div>

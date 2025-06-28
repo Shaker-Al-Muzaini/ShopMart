@@ -41,8 +41,8 @@ class HomeController extends Controller
                 ->where('id', '!=', $product->id)
                 ->limit(4)
                 ->get()
-        );
 
+        );
 
         return Inertia::render('Ecommerce/ProductDetail', [
             'product' => $productResource->resolve(),

@@ -1,205 +1,189 @@
 import { Link, usePage } from '@inertiajs/react';
-import React, { useState } from 'react';
-import { FaFacebookF, FaTwitter, FaInstagram, FaPinterestP, FaShoppingCart, FaChevronDown, FaBars, FaChevronRight } from 'react-icons/fa';
-import { User, Search } from 'lucide-react';
+import { ChevronDown, Facebook, Instagram, Menu, Search, ShoppingCart, Twitter, User } from 'lucide-react';
+import { useState } from 'react';
+import CategoryMenuItem from './CategoryMenuItem';
 
-export default function Header() {
-    const { parentCategories } = usePage().props;
-
-    const [open, setOpen] = useState(false);
+export default function EcommerceHeader() {
+    const { parentCategories, auth, cartCount =0 } = usePage().props as any;
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
     const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-
-    // ✅ تحويل التصنيفات إلى شكل هرمي مناسب
-    const transformCategory = (category) => ({
-        label: category.name,
-        icon: (
-            <img
-                src={category.image || '/default-category.png'}
-                alt={category.name}
-                className="w-5 h-5 mr-2 inline-block object-cover rounded"
-            />
-        ),
-        subcategories: category.children?.length
-            ? category.children.map(transformCategory)
-            : [],
-    });
-
-    // ✅ جهّز التصنيفات للاستخدام
-    const categories = parentCategories.map(transformCategory);
-
-    // ✅ مكون لعرض تصنيف فردي مع القائمة الفرعية إن وجدت
-    const CategoryItem = ({ item }) => {
-        const [open, setOpen] = useState(false);
-
-        return (
-            <div className="relative group">
-                <div
-                    onClick={() => setOpen(!open)}
-                    className="flex justify-between items-center px-4 py-3 hover:bg-gray-100 cursor-pointer"
-                >
-                    <div className="flex items-center">
-                        {item.icon}
-                        <span>{item.label}</span>
-                    </div>
-                    {item.subcategories && item.subcategories.length > 0 && (
-                        <FaChevronRight className="text-xs" />
-                    )}
-                </div>
-
-                {item.subcategories && open && (
-                    <div className="absolute left-full top-0 w-64 bg-white shadow-lg rounded-md z-50">
-                        {item.subcategories.map((subItem, i) => (
-                            subItem.subcategories && subItem.subcategories.length > 0 ? (
-                                <CategoryItem key={i} item={subItem} />
-                            ) : (
-                                <div
-                                    key={i}
-                                    className="block px-4 py-3 hover:bg-gray-100 cursor-pointer"
-                                >
-                                    <div className="flex items-center">
-                                        {subItem.icon}
-                                        <span>{subItem.label}</span>
-                                    </div>
-                                </div>
-                            )
-                        ))}
-                    </div>
-                )}
-            </div>
-        );
-    };
+    const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+    const [isSubCategoriesOpen, setIsSubCategoriesOpen] = useState(false);
+    const a=cartCount.length;
 
     return (
         <>
-            {/* شريط التواصل الاجتماعي واللغة والعملات */}
-            <div className="bg-gray-800 text-white py-2">
-                <div className="container mx-auto px-4 flex justify-between items-center">
+            {/* Top Header */}
+            <div className="bg-gray-800 py-2 text-white">
+                <div className="container mx-auto flex items-center justify-between px-4">
                     <div className="flex space-x-4">
-                        <Link href="#"><FaFacebookF className="h-6 w-6 text-[#1877F2]" /></Link>
-                        <Link href="#"><FaTwitter className="h-6 w-6 text-[#1DA1F2]" /></Link>
-                        <Link href="#"><FaInstagram className="h-6 w-6 text-[#E4405F]" /></Link>
-                        <Link href="#"><FaPinterestP className="h-6 w-6 text-[#BD081C]" /></Link>
+                        <Link href="#" className="hover:text-gray-300">
+                            <Facebook className="h-5 w-5" />
+                        </Link>
+                        <Link href="#" className="hover:text-gray-300">
+                            <Twitter className="h-5 w-5" />
+                        </Link>
+                        <Link href="#" className="hover:text-gray-300">
+                            <Instagram className="h-5 w-5" />
+                        </Link>
                     </div>
-
                     <div className="flex items-center space-x-6">
+                        {/* Currency Dropdown */}
                         <div className="relative">
                             <button onClick={() => setIsCurrencyOpen(!isCurrencyOpen)} className="flex items-center space-x-1 hover:text-gray-300">
                                 <span>USD</span>
-                                <FaChevronDown className="h-3 w-3" />
+                                <ChevronDown className="h-3 w-3" />
                             </button>
                             {isCurrencyOpen && (
-                                <div className="absolute right-0 mt-2 w-40 bg-white text-gray-800 shadow-lg rounded-md z-50">
-                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">USD - US Dollar</Link>
-                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">EUR - Euro</Link>
-                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">GBP - British Pound</Link>
+                                <div className="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-md bg-white text-gray-800 shadow-lg">
+                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                                        USD - US Dollar
+                                    </Link>
+                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                                        EUR - Euro
+                                    </Link>
+                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                                        GBP - British Pound
+                                    </Link>
                                 </div>
                             )}
                         </div>
 
+                        {/* Language Dropdown */}
                         <div className="relative">
                             <button onClick={() => setIsLanguageOpen(!isLanguageOpen)} className="flex items-center space-x-1 hover:text-gray-300">
                                 <span>English</span>
-                                <FaChevronDown className="h-3 w-3" />
+                                <ChevronDown className="h-3 w-3" />
                             </button>
                             {isLanguageOpen && (
-                                <div className="absolute right-0 mt-2 w-40 bg-white text-gray-800 shadow-lg rounded-md z-50">
-                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">English</Link>
-                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">Français</Link>
-                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">Español</Link>
+                                <div className="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-md bg-white text-gray-800 shadow-lg">
+                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                                        English
+                                    </Link>
+                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                                        Français
+                                    </Link>
+                                    <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                                        Español
+                                    </Link>
                                 </div>
                             )}
                         </div>
-
-                        <Link href="#" className="hover:text-gray-300 flex items-center space-x-1">
-                            <User className="h-5 w-5" />
-                            <span>Login</span>
-                        </Link>
                     </div>
                 </div>
             </div>
 
-            {/* رأس الصفحة الرئيسي */}
-            <header className="bg-white shadow-sm py-4">
-                <div className="container mx-auto px-4 flex justify-between items-center">
-                    <Link href="#" className="text-2xl font-bold text-indigo-600">ShopMart</Link>
+            {/* Main Header */}
+            <header className="bg-white py-4 shadow-sm">
+                <div className="container mx-auto flex items-center justify-between px-4">
+                    <Link href="/" className="text-2xl font-bold text-indigo-600">
+                        ShopMart
+                    </Link>
 
-                    <div className="flex-1 max-w-xl mx-8">
+                    <div className="mx-8 max-w-xl flex-1">
                         <div className="relative">
                             <input
                                 type="text"
                                 placeholder="Search for products..."
-                                className="w-full border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                className="w-full rounded-full border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                             />
-                            <button className="absolute right-0 top-0 h-full px-4 text-gray-500 hover:text-indigo-600">
-                                <Search />
+                            <button className="absolute top-0 right-0 h-full px-4 text-gray-500 hover:text-indigo-600">
+                                <Search className="h-5 w-5" />
                             </button>
                         </div>
                     </div>
 
                     <div className="flex items-center space-x-6">
+                        {/* Cart Dropdown */}
                         <div className="relative">
-                            <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative hover:text-indigo-600 text-gray-900">
-                                <FaShoppingCart className="h-6 w-6" />
-                                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">2</span>
-                            </button>
+                            <Link href={route('cart.index')} className="text-black relative hover:text-indigo-600">
+                                <ShoppingCart className="h-6 w-6" />
 
-                            {isCartOpen && (
-                                <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-md z-50">
-                                    <div className="p-4 border-b">
-                                        <h3 className="font-medium">Cart Summary (2 items)</h3>
-                                    </div>
-                                    {/* منتجات مزيفة للعرض */}
-                                    <div className="p-4">
-                                        <p>Demo cart item here</p>
-                                    </div>
-                                </div>
-                            )}
+                                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                                        {a}
+                                    </span>
+                            </Link>
                         </div>
 
-                        <div className="flex space-x-4">
-                            <Link href="#" className="text-gray-700 hover:text-indigo-600">Login</Link>
-                            <span className="text-gray-300">|</span>
-                            <Link href="#" className="text-gray-700 hover:text-indigo-600">Register</Link>
-                        </div>
+                        {/* Conditional Auth Section */}
+                        {auth.user ? (
+                            <div className="flex items-center space-x-4">
+                                <Link href={route('dashboard')} className="flex items-center space-x-1 text-gray-700 hover:text-indigo-600">
+                                    <User className="h-5 w-5" />
+                                    <span>{auth.user.name}</span>
+                                </Link>
+                                <Link href={route('logout')} method="post" as="button" className="text-gray-700 hover:text-indigo-600">
+                                    Logout
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="flex space-x-4">
+                                <Link href="/login" className="text-gray-700 hover:text-indigo-600">
+                                    Login
+                                </Link>
+                                <span className="text-gray-300">|</span>
+                                <Link href="/register" className="text-gray-700 hover:text-indigo-600">
+                                    Register
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 </div>
             </header>
 
-            {/* قائمة التنقل */}
+            {/* Navigation */}
             <nav className="bg-white shadow">
                 <div className="container mx-auto px-4">
                     <div className="flex">
-                        {/* القائمة المنسدلة للتصنيفات */}
-                        <div className="relative">
+                        <div className="text-black group dropdown relative" x-data="{ open: false }">
                             <button
-                                onClick={() => setIsOpen(!isOpen)}
-                                className="flex items-center text-black px-4 py-3 hover:text-indigo-600"
+                                onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+                                className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600 focus:outline-none"
                             >
-                                <FaBars className="mr-2" />
+                                <Menu className="mr-2 h-5 w-5" />
                                 <span>All Categories</span>
-                                <FaChevronDown className="ml-2 text-xs" />
+                                <ChevronDown className="ml-1 h-3 w-3" />
                             </button>
-
-                            {isOpen && (
-                                <div className="absolute left-0 w-64 text-black bg-white shadow-lg rounded-b-md z-50">
-                                    {categories.map((cat, i) => (
-                                        <CategoryItem key={i} item={cat} />
-                                    ))}
-                                </div>
-                            )}
+                            <div x-show="open" className="dropdown-menu absolute left-0 z-50 w-64 rounded-b-md bg-white shadow-lg">
+                                {/* <!-- Category with subcategories --> */}
+                                {parentCategories.length > 0 &&
+                                    parentCategories.map((category: any) => <CategoryMenuItem key={category.id} category={category} />)}
+                            </div>
                         </div>
 
-                        {/* روابط التنقل */}
+                        {/* Main Menu */}
                         <ul className="flex">
-                            <li><Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">Home</Link></li>
-                            <li><Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">Shop</Link></li>
-                            <li><Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">New Arrivals</Link></li>
-                            <li><Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">Deals</Link></li>
-                            <li><Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">Blog</Link></li>
-                            <li><Link href="#" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">Contact</Link></li>
+                            <li>
+                                <Link href="/" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">
+                                    Home
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/shop" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">
+                                    Shop
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/new-arrivals" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">
+                                    New Arrivals
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/deals" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">
+                                    Deals
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/blog" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">
+                                    Blog
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/contact" className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600">
+                                    Contact
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
+use App\Http\Middleware\UserCheckMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -12,12 +15,33 @@ Route::get('/index', function () {
 Route::get('/product/{slug}',[HomeController::class,'productDetail'])
     ->name('product.detail');
 
+// Cart routes
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart', 'index')->name('cart.index');
+    Route::post('/cart/add/{product}', 'store')->name('cart.store');
+    Route::put('/cart/{product}', 'update')->name('cart.update');
+    Route::delete('/cart/{product}', 'destroy')->name('cart.delete');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
+
+Route::middleware(['auth', UserCheckMiddleware::class])->group(function () {
+
+    Route::controller(UserController::class)->group(function () {
+        Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
+            Route::get('/dashboard', 'index')->name('dashboard');
+            Route::post('/profile', 'update')->name('profile.update');
+            Route::get('/profile/edit', 'edit')->name('profile.edit');
+        });
+    });
+});
+
+Route::get('/chat', [ChatbotController::class, 'show']);
+Route::post('/chatbot', [ChatbotController::class, 'handle']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
