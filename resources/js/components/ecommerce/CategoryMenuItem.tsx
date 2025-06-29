@@ -4,6 +4,7 @@ import { useState } from 'react';
 interface Category {
     id: number;
     name: string;
+    image: string;
     slug: string;
     icon?: string;
     children: Category[];
@@ -22,12 +23,16 @@ export default function CategoryMenuItem({ category }: CategoryMenuItemProps) {
                 <>
                     <a
                         href="#"
-                        className="flex items-center justify-between px-4 py-3 hover:bg-gray-100"
+                        className="text-black  flex items-center justify-between px-4 py-3 hover:bg-gray-100"
                         onMouseEnter={() => setIsSubMenuOpen(true)}
                         onMouseLeave={() => setIsSubMenuOpen(false)}
                     >
-                        <div className="flex items-center">
-                            <i className={`fas fa-${category.icon || 'folder'} mr-3 text-indigo-500`}></i>
+                        <div className="text-black   flex items-center">
+                            <i className={`fas fa-${category.icon || 'folder'} mr-3 =text-indigo-500`}></i>
+                            <img
+                                src={category.image || '/default-category.png'}
+                                className=" w-5 h-5 mr-2 inline-block object-cover rounded"
+                            />
                             <span>{category.name}</span>
                         </div>
                         <i className="fas fa-chevron-right text-xs"></i>

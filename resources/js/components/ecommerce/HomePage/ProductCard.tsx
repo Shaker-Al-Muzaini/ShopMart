@@ -1,6 +1,8 @@
 import { ProductListItem } from '@/types';
 import { router, useForm } from '@inertiajs/react';
 import { Heart, ShoppingBag } from 'lucide-react';
+import { toast } from 'react-toastify';
+
 
 type Props = {
     product: ProductListItem;
@@ -23,7 +25,11 @@ const ProductCard = ({ product }: Props) => {
         form.post(route('cart.store', product.id), {
             preserveScroll: true,
             preserveState: true,
+            onSuccess: () => {
+                toast.success('The product has been added to the shopping cart.');
+            },
             onError: (err: any) => {
+                toast.error('The product has not been added.');
                 console.log(err);
             },
         });
@@ -73,7 +79,7 @@ const ProductCard = ({ product }: Props) => {
                 </p>
                 <div className="flex items-center justify-between">
                     <div>
-                        <span className="font-bold text-indigo-600">{product.price}</span>
+                        <span className="font-bold text-indigo-600">${product.price}</span>
                         {product.isDiscount && (
                             <span className="ml-2 text-gray-400 line-through">
                 ${product.originalPrice ?? '119.99'}

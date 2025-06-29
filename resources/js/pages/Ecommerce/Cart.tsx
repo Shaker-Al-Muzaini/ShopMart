@@ -2,6 +2,7 @@ import { Link, router } from '@inertiajs/react'
 import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { EcomLayout } from '@/layouts/ecom-layout';
+import { toast } from 'react-toastify';
 
 interface CartItem {
     id: string | number
@@ -33,7 +34,7 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
     const updateQuantity = (item: CartItem, newQuantity: number) => {
         if (newQuantity < 1) return
 
-        const itemKey = `${item.product_id}_${JSON.stringify(item.option_ids)}`
+        const itemKey = `${item.id}`
         setUpdatingItems((prev) => new Set(prev).add(itemKey))
 
         router.put(
@@ -59,11 +60,14 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
             data: {
                 option_ids: item.option_ids,
             },
+            onSuccess: () => {
+                toast.success('The product has been deleted.');
+            },
         })
     }
 
     const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    const shipping = 0 // Free shipping
+    const shipping = 0
     const total = subtotal + shipping
 
     const handleCheckout = () => {
@@ -76,28 +80,14 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
                 <div className="container mx-auto px-4 py-8">
                     <div className="text-center">
                         <div className="mb-6">
-                            <svg
-                                className="mx-auto h-24 w-24 text-gray-300"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m6 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"
-                                />
+                            <svg className="mx-auto h-24 w-24 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m6 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
                             </svg>
                         </div>
                         <h2 className="mb-4 text-2xl font-bold text-gray-800">Your cart is empty</h2>
-                        <p className="mb-8 text-gray-600">
-                            Looks like you haven't added any items to your cart yet.
-                        </p>
-                        <Link
-                            href="/"
-                            className="inline-flex items-center rounded-md bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700"
-                        >
+                        <p className="mb-8 text-gray-600">Looks like you haven't added any items to your cart yet.</p>
+                        <Link href="/" className="inline-flex items-center rounded-md bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700">
                             <ArrowLeft className="mr-2 h-5 w-5" />
                             Continue Shopping
                         </Link>
@@ -110,23 +100,18 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
     return (
         <EcomLayout>
             <div className="container mx-auto px-4 py-8">
-                {/* Breadcrumb */}
                 <div className="mb-6">
                     <nav className="flex" aria-label="Breadcrumb">
                         <ol className="flex items-center space-x-4">
                             <li>
-                                <Link href="/" className="text-gray-500 hover:text-gray-700">
-                                    Home
-                                </Link>
+                                <Link href="/" className="text-gray-500 hover:text-gray-700">Home</Link>
                             </li>
                             <li>
                                 <div className="flex items-center">
                                     <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clipRule="evenodd"
-                                        />
+                                        <path fillRule="evenodd"
+                                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                              clipRule="evenodd" />
                                     </svg>
                                     <span className="ml-4 text-gray-500">Shopping Cart</span>
                                 </div>
@@ -136,7 +121,6 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
                 </div>
 
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                    {/* Cart Items */}
                     <div className="lg:col-span-2">
                         <div className="rounded-lg bg-white shadow-sm">
                             <div className="border-b px-6 py-4">
@@ -146,7 +130,7 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
                             </div>
                             <div className="divide-y">
                                 {cartItems.map((item) => {
-                                    const itemKey = `${item.product_id}_${JSON.stringify(item.option_ids)}`
+                                    const itemKey = `${item.id}`
                                     const isUpdating = updatingItems.has(itemKey)
 
                                     return (
@@ -159,10 +143,7 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
                                                 />
                                                 <div className="ml-4 flex-1">
                                                     <h3 className="text-lg font-medium text-gray-800">
-                                                        <Link
-                                                            href={route('product.detail', { slug: item.slug })}
-                                                            className="hover:text-indigo-600"
-                                                        >
+                                                        <Link href={route('product.detail', { slug: item.slug })} className="hover:text-indigo-600">
                                                             {item.name}
                                                         </Link>
                                                     </h3>
@@ -170,8 +151,8 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
                                                         <div className="mt-1 text-sm text-gray-600">
                                                             {item.options.map((option) => (
                                                                 <span key={option.id} className="mr-2">
-                                  {option.type.name}: {option.name}
-                                </span>
+                                                                    {option.type.name}: {option.name}
+                                                                </span>
                                                             ))}
                                                         </div>
                                                     )}
@@ -215,12 +196,11 @@ const Cart = ({ cartItems, cartCount }: CartProps) => {
                         </div>
                     </div>
 
-                    {/* Order Summary */}
                     <div className="lg:col-span-1">
                         <div className="rounded-lg bg-white p-6 shadow-sm">
                             <h2 className="mb-4 text-lg font-semibold text-gray-800">Order Summary</h2>
                             <div className="space-y-3">
-                                <div className="flex justify-between">
+                                <div className="text-black flex justify-between">
                                     <span className="text-gray-600">Subtotal</span>
                                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                                 </div>

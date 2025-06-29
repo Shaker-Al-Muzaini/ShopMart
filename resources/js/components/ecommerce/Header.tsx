@@ -1,5 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronDown, Facebook, Instagram, Menu, Search, ShoppingCart, Twitter, User } from 'lucide-react';
+import { FaFacebookF, FaTwitter, FaInstagram, FaShoppingCart, FaChevronDown, FaBars, FaChevronRight } from 'react-icons/fa';
+import {Search,User } from 'lucide-react';
 import { useState } from 'react';
 import CategoryMenuItem from './CategoryMenuItem';
 
@@ -9,7 +10,6 @@ export default function EcommerceHeader() {
     const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
     const [isLanguageOpen, setIsLanguageOpen] = useState(false);
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
-    const [isSubCategoriesOpen, setIsSubCategoriesOpen] = useState(false);
 
     return (
         <>
@@ -18,21 +18,21 @@ export default function EcommerceHeader() {
                 <div className="container mx-auto flex items-center justify-between px-4">
                     <div className="flex space-x-4">
                         <Link href="#" className="hover:text-gray-300">
-                            <Facebook className="h-5 w-5" />
+                            <FaFacebookF className="h-5 w-5" />
                         </Link>
                         <Link href="#" className="hover:text-gray-300">
-                            <Twitter className="h-5 w-5" />
+                            <FaTwitter className="h-5 w-5" />
                         </Link>
                         <Link href="#" className="hover:text-gray-300">
-                            <Instagram className="h-5 w-5" />
+                            <FaInstagram className="h-5 w-5" />
                         </Link>
                     </div>
-                    <div className="flex items-center space-x-6">
+                    <div className=" flex items-center space-x-6">
                         {/* Currency Dropdown */}
                         <div className="relative">
                             <button onClick={() => setIsCurrencyOpen(!isCurrencyOpen)} className="flex items-center space-x-1 hover:text-gray-300">
                                 <span>USD</span>
-                                <ChevronDown className="h-3 w-3" />
+                                <FaChevronDown className="h-3 w-3" />
                             </button>
                             {isCurrencyOpen && (
                                 <div className="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-md bg-white text-gray-800 shadow-lg">
@@ -53,7 +53,7 @@ export default function EcommerceHeader() {
                         <div className="relative">
                             <button onClick={() => setIsLanguageOpen(!isLanguageOpen)} className="flex items-center space-x-1 hover:text-gray-300">
                                 <span>English</span>
-                                <ChevronDown className="h-3 w-3" />
+                                <FaChevronDown className="h-3 w-3" />
                             </button>
                             {isLanguageOpen && (
                                 <div className="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-md bg-white text-gray-800 shadow-lg">
@@ -97,7 +97,7 @@ export default function EcommerceHeader() {
                         {/* Cart Dropdown */}
                         <div className="relative">
                             <Link href={route('cart.index')} className="relative hover:text-indigo-600">
-                                <ShoppingCart className="h-6 w-6" />
+                                <FaShoppingCart className="h-6 w-6" />
                                 {cartCount > 0 && (
                                     <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                                         {cartCount}
@@ -140,15 +140,17 @@ export default function EcommerceHeader() {
                             <button
                                 onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
                                 className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600 focus:outline-none"
+
                             >
-                                <Menu className="mr-2 h-5 w-5" />
+                                <FaBars className="mr-2" />
                                 <span>All Categories</span>
-                                <ChevronDown className="ml-1 h-3 w-3" />
+                                <FaChevronDown className="ml-1 h-3 w-3" />
                             </button>
-                            <div x-show="open" className="dropdown-menu absolute left-0 z-50 w-64 rounded-b-md bg-white shadow-lg">
-                                {/* <!-- Category with subcategories --> */}
+                            <div x-show="open" className="text-black dropdown-menu absolute left-0 z-50 w-64 rounded-b-md bg-white shadow-lg">
+
                                 {parentCategories.length > 0 &&
                                     parentCategories.map((category: any) => <CategoryMenuItem key={category.id} category={category} />)}
+
                             </div>
                         </div>
 

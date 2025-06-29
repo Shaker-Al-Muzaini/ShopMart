@@ -54,7 +54,7 @@ class CartService
     protected function updateItemQuantityToDatabase(int $productId, int $quantity, array $optionIds = []): void
     {
         $userId = Auth::id();
-        krsort($optionIds);
+        sort($optionIds);
 
         $cartItem = Cart::where('product_id', $productId)->where('user_id', $userId)
             ->where('variation_type_option_ids', $optionIds)
@@ -69,7 +69,7 @@ class CartService
     protected function updateItemQuantityToCookies(int $productId, int $quantity, array $optionIds = []): void
     {
         $cartItems = $this->getCartItemsFromCookies();
-        krsort($optionIds);
+        sort($optionIds);
         $cartItemKey = $productId . '_' . json_encode($optionIds);
         if (isset($cartItems[$cartItemKey])) {
             $cartItems[$cartItemKey]['quantity'] = $quantity;
@@ -80,7 +80,7 @@ class CartService
     protected function removeItemFromDatabase(int $productId, array $optionIds = []): void
     {
         $userId = Auth::id();
-        krsort($optionIds);
+        sort($optionIds);
         Cart::where('product_id', $productId)
             ->where('user_id', $userId)
             ->where('variation_type_option_ids', $optionIds)
@@ -90,7 +90,7 @@ class CartService
     protected function removeItemFromCookies(int $productId, array $optionIds = []): void
     {
         $cartItems = $this->getCartItemsFromCookies();
-        krsort($optionIds);
+        sort($optionIds);
         $cartItemKey = $productId . '_' . json_encode($optionIds);
         if (isset($cartItems[$cartItemKey])) {
             unset($cartItems[$cartItemKey]);
@@ -166,7 +166,7 @@ class CartService
     protected function saveItemToDatabase(int $productId, int $quantity, int $price, array $optionIds): void
     {
         $userId = Auth::id();
-        krsort($optionIds);
+        sort($optionIds);
 
         $cartItem = Cart::where('product_id', $productId)
             ->where('user_id', $userId)
@@ -190,7 +190,7 @@ class CartService
     protected function saveItemToCookies(int $productId, int $quantity, int $price, array $optionIds): void
     {
         $cartItems = $this->getCartItemsFromCookies();
-        krsort($optionIds);
+        sort($optionIds);
         $cartItemKey = $productId . '_' . json_encode($optionIds);
         if (!isset($cartItems[$cartItemKey])) {
             $cartItems[$cartItemKey] = [

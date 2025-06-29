@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
-        if ($user->role !== 'user') {
+        if ($user->role == 'user') {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();

@@ -146,12 +146,12 @@ export default function Checkout({
                 <div className="flex flex-col gap-8 lg:flex-row">
                     {/* Customer Information Form */}
                     <div className="lg:w-2/3">
-                        <div className="mb-6 overflow-hidden rounded-lg bg-white shadow-sm">
+                        <div className="text-black mb-6 overflow-hidden rounded-lg bg-white shadow-sm">
                             <div className="p-6">
                                 <h2 className="mb-4 text-lg font-semibold">Billing Details</h2>
 
                                 <form onSubmit={handleSubmit}>
-                                    <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div className=" mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
                                         <div>
                                             <label
                                                 htmlFor="first_name"
@@ -360,7 +360,7 @@ export default function Checkout({
 
                                     {/* Shipping Address (shown when checkbox is unchecked) */}
                                     {!sameAsBilling && (
-                                        <div className="mb-6 border-t pt-6">
+                                        <div className="text-black mb-6 border-t pt-6">
                                             <h3 className="mb-4 text-lg font-semibold">Shipping Address</h3>
                                             <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
                                                 <div>
@@ -514,17 +514,17 @@ export default function Checkout({
                             <div className="p-6">
                                 <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
 
-                                <div className="mb-6 space-y-4">
+                                <div className="text-black mb-6 space-y-4">
                                     {cartItems.map((item) => (
                                         <div key={item.id} className="flex">
                                             <div className="h-16 w-16 flex-shrink-0 rounded bg-gray-100">
                                                 <img
-                                                    src={item.image}
+                                                    src={item.image.replace('localhost', '127.0.0.1:8000')}
                                                     alt={item.name}
                                                     className="h-16 w-16 rounded object-cover"
                                                 />
                                             </div>
-                                            <div className="ml-4 flex-1">
+                                            <div className="text-black ml-4 flex-1">
                                                 <div className="flex justify-between">
                                                     <h4 className="text-sm font-medium">{item.name}</h4>
                                                     <span className="text-sm font-medium">{formatPrice(item.price)}</span>
@@ -544,7 +544,7 @@ export default function Checkout({
                                     ))}
                                 </div>
 
-                                <div className="space-y-3 border-t pt-4">
+                                <div className="text-black space-y-3 border-t pt-4">
                                     <div className="flex justify-between text-sm">
                                         <span className="text-gray-600">Subtotal</span>
                                         <span className="font-medium">{formatPrice(subtotal)}</span>

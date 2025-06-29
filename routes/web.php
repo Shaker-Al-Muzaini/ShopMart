@@ -8,12 +8,10 @@ use App\Http\Middleware\UserCheckMiddleware;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/',[HomeController::class,'index']);
-Route::get('/index', function () {
-    return Inertia::render('welcome');
-})->name('home');
-Route::get('/product/{slug}',[HomeController::class,'productDetail'])
-    ->name('product.detail');
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/', 'index')->name('home');
+    Route::get('/product/{slug}', 'productDetail')->name('product.detail');
+});
 
 // Cart routes
 Route::controller(CartController::class)->group(function () {
@@ -25,8 +23,15 @@ Route::controller(CartController::class)->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('Dashboard');
     })->name('dashboard');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CartController::class, 'checkoutForm'])->name('checkout');
+    Route::get('/payment', [CartController::class, 'paymentForm'])->name('payment');
+    Route::post('/payment/process', [CartController::class, 'processPayment'])->name('payment.process');
+    Route::get('/order-complete/{order}', [CartController::class, 'orderComplete'])->name('order.complete');
 });
 
 Route::middleware(['auth', UserCheckMiddleware::class])->group(function () {
