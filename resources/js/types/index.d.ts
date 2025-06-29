@@ -14,16 +14,18 @@ export interface NavGroup {
     title: string;
     items: NavItem[];
 }
-export interface ProductListItem{
+type ProductListItem = {
     id: number;
+    slug: string;
     name: string;
     description: string;
     price: number;
-    image: string;
-    isNew?: boolean;
-    rating?: number;
-    [key: string]: unknown;
-}
+    originalPrice?: number;
+    discount?: number;
+    isDiscount?: boolean;
+    image?: string;
+};
+
 
 export interface NavItem {
     title: string;

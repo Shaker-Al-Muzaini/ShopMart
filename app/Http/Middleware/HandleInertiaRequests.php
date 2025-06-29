@@ -3,11 +3,13 @@
 namespace App\Http\Middleware;
 
 use App\Http\Resources\CatogroryResource;
-use App\Models\Category;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
+use App\Models\Category;
+use Illuminate\Support\Str as str;
+use App\Services\CartService;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -40,10 +42,13 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
-        $parentCategories=[];
-        $pCategories =Category::isParent()->with('children')->get();
-        $parentCategories=CatogroryResource::collection($pCategories)->toArray($request);
 
+        $parentCategories = [];
+        $pCategories = Category::isParent()->with('children')->get();
+        $parentCategories = CatogroryResource::collection($pCategories)->toArray($request);
+
+        $cartService = app(CartService::class);
+        $cartCount = $cartService->getCartCount();
 
         return [
             ...parent::share($request),
@@ -52,12 +57,13 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'ziggy' => fn (): array => [
+            'ziggy' => fn(): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-            'parentCategories' =>$parentCategories,
+            'parentCategories' => $parentCategories,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'cartCount' => $cartCount
         ];
     }
 }

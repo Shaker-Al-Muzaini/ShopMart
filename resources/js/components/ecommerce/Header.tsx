@@ -4,13 +4,12 @@ import { useState } from 'react';
 import CategoryMenuItem from './CategoryMenuItem';
 
 export default function EcommerceHeader() {
-    const { parentCategories, auth, cartCount =0 } = usePage().props as any;
+    const { parentCategories, auth, cartCount = 0 } = usePage().props as any;
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
     const [isLanguageOpen, setIsLanguageOpen] = useState(false);
     const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
     const [isSubCategoriesOpen, setIsSubCategoriesOpen] = useState(false);
-    const a=cartCount.length;
 
     return (
         <>
@@ -94,15 +93,16 @@ export default function EcommerceHeader() {
                         </div>
                     </div>
 
-                    <div className="flex items-center space-x-6">
+                    <div className="text-black  flex items-center space-x-6">
                         {/* Cart Dropdown */}
                         <div className="relative">
-                            <Link href={route('cart.index')} className="text-black relative hover:text-indigo-600">
+                            <Link href={route('cart.index')} className="relative hover:text-indigo-600">
                                 <ShoppingCart className="h-6 w-6" />
-
-                                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                                        {a}
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                                        {cartCount}
                                     </span>
+                                )}
                             </Link>
                         </div>
 
@@ -136,7 +136,7 @@ export default function EcommerceHeader() {
             <nav className="bg-white shadow">
                 <div className="container mx-auto px-4">
                     <div className="flex">
-                        <div className="text-black group dropdown relative" x-data="{ open: false }">
+                        <div className="group dropdown relative" x-data="{ open: false }">
                             <button
                                 onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
                                 className="flex items-center px-4 py-3 text-gray-700 hover:text-indigo-600 focus:outline-none"
