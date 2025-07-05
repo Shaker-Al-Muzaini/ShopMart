@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FormEvent } from 'react';
+import React, { useEffect, useState, FormEvent } from 'react'; 
 import { useForm, usePage } from '@inertiajs/react';
 
 type MessagePair = {
